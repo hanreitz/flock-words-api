@@ -29,4 +29,8 @@ class ApplicationController < ActionController::API
     !!current_user
   end
 
+  def authorized
+    render json: { message: 'You must be logged in to view this page.' }, status: :unauthorized unless logged_in?
+  end
+
 end
