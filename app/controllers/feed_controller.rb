@@ -1,2 +1,0 @@
-class FeedController < ApplicationController
-end
