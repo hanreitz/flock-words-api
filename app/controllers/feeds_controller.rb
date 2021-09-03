@@ -22,7 +22,7 @@ class FeedsController < ApplicationController
     headers = {'Authorization': "Bearer #{bearer}"}
     response = JSON.parse(RestClient.get(url, headers))
     user_id = response["data"]["id"]
-    tweet_url = "https://api.twitter.com/2/users/#{user_id}/tweets"
+    tweet_url = "https://api.twitter.com/2/users/#{user_id}/tweets?expansions=author_id&tweet.fields=created_at"
     tweets_response = JSON.parse(RestClient.get(tweet_url, headers))
     if tweets_response["meta"]["result_count"] > 0
       tweets_response["data"]
@@ -38,7 +38,7 @@ class FeedsController < ApplicationController
       feed = Feed.new(feed_params)
       if feed.save
         valid_handle.each do |datum|
-          Tweet.create(twitter_id: datum["id"], content: datum["text"], feed_id: feed.id)
+          Tweet.create(twitter_id: datum["id"], content: datum["text"], feed_id: feed.id, created_at: datum["created_at"])
         end
         render json: feed, status: :created, location: feed
       else
