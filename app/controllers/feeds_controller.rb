@@ -16,19 +16,33 @@ class FeedsController < ApplicationController
 
   # POST /feeds
 
-  def validate_handle
-    endpoint = 'https://api.twitter.com/2/users/by/username/:username/tweets'
+  def validate_handle(handle)
+    bearer = ENV["BEARER_TOKEN"]
+    url = "https://api.twitter.com/2/users/by/username/:#{handle}/tweets"
+    headers = {'Authorization': "Bearer #{bearer}"}
+    response = RestClient.get(url, headers)
+    if response.meta.result_count > 0
+      response.data
+    else 
+      false
+    end
   end
 
   def create
+    valid_handle = validate_handle(feed_params.handle)
 
-    @feed = Feed.new(feed_params)
-
-    if @feed.save
-      render json: @feed, status: :created, location: @feed
+    if valid_handle
+      feed = Feed.new(feed_params)
+      if feed.save
+        valid_handle.each do |datum|
+          Tweet.create(twitter_id: datum[:id], content: datum[:text], feed_id: feed.id)
+        end
+        render json: feed, status: :created, location: feed
+      else
+        render json: feed.errors, status: :unprocessable_entity
+      end
     else
-      render json: @feed.errors, status: :unprocessable_entity
-    end
+      render json: message: 'Invalid Twitter handle'
   end
 
   # PATCH/PUT /feeds/1
