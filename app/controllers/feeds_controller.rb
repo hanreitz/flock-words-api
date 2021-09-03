@@ -1,4 +1,5 @@
 class FeedsController < ApplicationController
+  require 'rest-client'
   before_action :set_feed, only: [:show, :update, :destroy]
 
   # GET /feeds
