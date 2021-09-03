@@ -10,11 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_26_224921) do
+ActiveRecord::Schema.define(version: 2021_09_03_155836) do
 
   create_table "feeds", force: :cascade do |t|
     t.string "handle"
     t.integer "user_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "tweets", force: :cascade do |t|
+    t.string "content"
+    t.string "twitter_id"
+    t.integer "feed_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
