@@ -15,8 +15,13 @@ class FeedsController < ApplicationController
   end
 
   # POST /feeds
+
+  def validate_handle
+    endpoint = 'https://api.twitter.com/2/users/by/username/:username/tweets'
+  end
+
   def create
-    
+
     @feed = Feed.new(feed_params)
 
     if @feed.save
