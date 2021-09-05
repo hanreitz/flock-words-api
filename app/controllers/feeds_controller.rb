@@ -60,6 +60,7 @@ class FeedsController < ApplicationController
 
   # DELETE /feeds/1
   def destroy
+    @feed.tweets.destroy_all
     @feed.destroy
   end
 
