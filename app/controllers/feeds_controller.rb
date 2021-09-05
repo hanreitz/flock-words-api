@@ -22,7 +22,7 @@ class FeedsController < ApplicationController
     headers = {'Authorization': "Bearer #{bearer}"}
     response = JSON.parse(RestClient.get(url, headers))
     user_id = response["data"]["id"]
-    tweet_url = "https://api.twitter.com/2/users/#{user_id}/tweets?expansions=author_id&tweet.fields=created_at"
+    tweet_url = "https://api.twitter.com/2/users/#{user_id}/tweets?expansions=author_id&tweet.fields=created_at&max_results=20"
     tweets_response = JSON.parse(RestClient.get(tweet_url, headers))
     if tweets_response["meta"]["result_count"] > 0
       tweets_response["data"]
