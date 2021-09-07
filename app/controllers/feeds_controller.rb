@@ -17,6 +17,9 @@ class FeedsController < ApplicationController
   # POST /feeds
 
   def validate_handle(handle)
+    if handle.include?('@')
+      handle = handle.slice(1)
+    end
     bearer = ENV["BEARER_TOKEN"]
     url = "https://api.twitter.com/2/users/by/username/#{handle}"
     headers = {'Authorization': "Bearer #{bearer}"}
